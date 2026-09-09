@@ -116,7 +116,6 @@ async function fetchAllGlobalCampuses(token: string): Promise<Record<number, Glo
 }
 
 function extractPromo(user: Holder42): string | null {
-  if (user.login === "omakran") return "2022";
   if (user.pool_year) {
     return user.pool_year.toString();
   }
@@ -314,12 +313,6 @@ async function upsertHolders(
 
   for (const holder of holders) {
     try {
-      const BLOCKLIST = ['jiezhang','aolde-mo', 'tguiter', 'boulon', 'mwilsch', 'dtunderm', 'thifranc', 'jpeguet', 'texam'];
-      if (BLOCKLIST.includes(holder.login)) {
-        skipped++;
-        continue;
-      }
-
       const transferData = transfers.get(holder.id);
       if (!transferData || transferData.originCampusId !== campusId) {
         skipped++;
