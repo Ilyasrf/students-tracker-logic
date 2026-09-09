@@ -41,24 +41,24 @@ Finally, we take the clean list of actual transfer students and push them to you
 
 ---
 
-## 🛠️ Commands to View the Raw Data
+## 🪄 Do You Wanna Try This Magic?
 
-If you want to bypass the frontend dashboard and look at the raw data or test the logic directly in your terminal, here are the best tools:
+If you have 42 API access and want to test the core logic yourself without setting up a database or running scripts, you can do it right in your terminal. Here is how to test the raw tracking logic from scratch:
 
-### 1. Prisma Studio (The easiest way to view the DB)
-Run this in your terminal:
-```bash
-npx prisma studio
-```
-This opens a local web interface at `http://localhost:5555` where you can view, edit, or delete records in your Supabase database directly like an Excel spreadsheet.
-
-### 2. Raw API testing (Using curl)
-To see exactly what the 42 API returns for a specific student's campus history, you can generate a token and use `curl`:
+### 1. Get Your Access Token
+First, you need to generate a temporary token. Run this in your terminal (replace `YOUR_UID` and `YOUR_SECRET` with your actual 42 API app credentials):
 
 ```bash
-# Get a token first
-curl -X POST https://api.intra.42.fr/oauth/token -d "grant_type=client_credentials&client_id=YOUR_ID&client_secret=YOUR_SECRET"
-
-# Check a student's campus history (replace YOUR_TOKEN and USER_ID)
-curl -H "Authorization: Bearer YOUR_TOKEN" https://api.intra.42.fr/v2/users/USER_ID/campus_users
+curl -X POST https://api.intra.42.fr/oauth/token \
+  -d "grant_type=client_credentials&client_id=YOUR_UID&client_secret=YOUR_SECRET"
 ```
+
+### 2. Check a Student's Campus History
+Now that you have your token, you can test the exact endpoint we use to find out if someone transferred. Replace `USER_LOGIN` with the login of a student you want to investigate:
+
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  https://api.intra.42.fr/v2/users/USER_LOGIN/campus_users
+```
+
+If the array returned contains only Moroccan campus IDs (16, 21, 55, 75), they are still local. If you see foreign campus IDs in that array... the radar caught them!
